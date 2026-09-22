@@ -7,14 +7,14 @@
 // Security), pero aun así se cargan aquí como constantes editables en vez de
 // dejarlas repartidas por el código. Nunca pongas aquí la "service_role key".
 
-const SUPABASE_URL = "https://qxvloqrtmcxjpayqdsov.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://qxvloqrtmcxjpayqdsov.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_FJgDHhyO4JiYQuEgiXbMaQ_adaHRS76";
 
 let supabaseClient = null;
 let USUARIO_ACTUAL = null; // objeto user de Supabase Auth, o null si no hay sesión
 
 function supabaseConfigurado() {
-  return SUPABASE_URL !== "https://qxvloqrtmcxjpayqdsov.supabase.co/rest/v1/" && SUPABASE_ANON_KEY !== "sb_publishable_FJgDHhyO4JiYQuEgiXbMaQ_adaHRS76";
+  return SUPABASE_URL.startsWith("https://") && SUPABASE_URL.endsWith(".supabase.co") && SUPABASE_ANON_KEY.length > 20;
 }
 
 async function cargarLibreriaSupabase() {
