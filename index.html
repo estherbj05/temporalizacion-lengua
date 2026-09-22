@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Temporalización de Lengua · 2º Primaria</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="app-title">
+      <span class="app-icon">📘</span>
+      <div>
+        <h1>Temporalización de Lengua</h1>
+        <p class="app-subtitle">2ºC · C.E.I.P. Nuestra Señora de la Natividad · Curso 2026/2027</p>
+      </div>
+    </div>
+    <button id="btn-generar" class="btn btn-primary">⚙️ Generar temporalización</button>
+    <span id="auth-status" class="auth-status"></span>
+    <button id="btn-logout" class="btn btn-secondary" style="display:none;">Cerrar sesión</button>
+  </header>
+
+  <nav class="app-nav" id="app-nav">
+    <button class="nav-btn active" data-view="hoy">📅 Hoy</button>
+    <button class="nav-btn" data-view="semana">📆 Semana</button>
+    <button class="nav-btn" data-view="mes">🗓️ Mes</button>
+    <button class="nav-btn" data-view="curso">📋 Todo el curso</button>
+    <button class="nav-btn" data-view="progreso">📊 Progreso</button>
+    <span class="nav-sep"></span>
+    <button class="nav-btn" data-view="contenidos">🗂️ Contenidos</button>
+    <button class="nav-btn" data-view="horario">🕘 Horario</button>
+    <button class="nav-btn" data-view="calendario">📆 Calendario</button>
+    <button class="nav-btn" data-view="historial">🕓 Historial</button>
+  </nav>
+
+  <main class="app-main">
+
+    <!-- VISTA HOY -->
+    <section id="view-hoy" class="view active">
+      <div class="today-card">
+        <h2 id="today-date">HOY — LUNES 21 DE SEPTIEMBRE</h2>
+        <div class="today-grid">
+          <div class="today-item">
+            <h3>📖 Libro</h3>
+            <p id="today-libro" class="today-value">—</p>
+          </div>
+          <div class="today-item">
+            <h3>✍️ Caligrafía</h3>
+            <p id="today-caligrafia" class="today-value">—</p>
+          </div>
+          <div class="today-item">
+            <h3>📚 Lectura</h3>
+            <p id="today-lectura" class="today-value">—</p>
+          </div>
+          <div class="today-item">
+            <h3>📝 Copia</h3>
+            <p id="today-copia" class="today-value">—</p>
+          </div>
+        </div>
+        <div class="today-status">
+          <p class="status-label">Estado de la sesión</p>
+          <div class="status-buttons">
+            <button class="status-btn status-green" data-status="realizado">🟢 Realizado</button>
+            <button class="status-btn status-orange" data-status="por-terminar">🟠 Por terminar</button>
+            <button class="status-btn status-red" data-status="no-realizado">🔴 No realizado</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA SEMANA -->
+    <section id="view-semana" class="view">
+      <h2>Vista semanal</h2>
+      <div class="table-wrap">
+        <table class="temporalizacion-table" id="tabla-semana">
+          <thead>
+            <tr><th>Fecha</th><th>Día</th><th>📖 Libro</th><th>✍️ Caligrafía</th><th>📚 Lectura</th><th>📝 Copia</th><th>Estado</th><th>Acciones</th></tr>
+          </thead>
+          <tbody><!-- filas generadas por temporalizacion.js --></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VISTA MES -->
+    <section id="view-mes" class="view">
+      <h2>Vista mensual</h2>
+      <div class="table-wrap">
+        <table class="temporalizacion-table" id="tabla-mes">
+          <thead>
+            <tr><th>Fecha</th><th>Día</th><th>📖 Libro</th><th>✍️ Caligrafía</th><th>📚 Lectura</th><th>📝 Copia</th><th>Estado</th><th>Acciones</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VISTA CURSO COMPLETO -->
+    <section id="view-curso" class="view">
+      <h2>Temporalización completa del curso</h2>
+      <div class="toolbar">
+        <label>Desde <input type="date" id="curso-desde" value="2026-09-08"></label>
+        <label>Hasta <input type="date" id="curso-hasta" value="2026-12-22"></label>
+        <div class="export-buttons">
+          <button class="btn btn-secondary" id="export-pdf">Exportar PDF</button>
+          <button class="btn btn-secondary" id="export-excel">Exportar Excel</button>
+          <button class="btn btn-secondary" id="export-csv">Exportar CSV</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="temporalizacion-table" id="tabla-curso">
+          <thead>
+            <tr><th>Fecha</th><th>Día</th><th>📖 Libro</th><th>✍️ Caligrafía</th><th>📚 Lectura</th><th>📝 Copia</th><th>Estado</th><th>Acciones</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VISTA PROGRESO -->
+    <section id="view-progreso" class="view">
+      <h2>Progreso del curso</h2>
+      <div class="progreso-grid">
+        <div class="progreso-card">
+          <h3>📖 Libro</h3>
+          <p class="progreso-num" id="progreso-libro">0 / 0</p>
+          <div class="progreso-bar"><div class="progreso-fill" id="progreso-libro-fill"></div></div>
+        </div>
+        <div class="progreso-card">
+          <h3>✍️ Caligrafía</h3>
+          <p class="progreso-num" id="progreso-caligrafia">0 / 0</p>
+          <div class="progreso-bar"><div class="progreso-fill" id="progreso-caligrafia-fill"></div></div>
+        </div>
+        <div class="progreso-card">
+          <h3>📚 Lecturas</h3>
+          <p class="progreso-num" id="progreso-lecturas">0 / 0</p>
+          <div class="progreso-bar"><div class="progreso-fill" id="progreso-lecturas-fill"></div></div>
+        </div>
+        <div class="progreso-card">
+          <h3>📝 Copias</h3>
+          <p class="progreso-num" id="progreso-copias">0 / 0</p>
+          <div class="progreso-bar"><div class="progreso-fill" id="progreso-copias-fill"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA CONTENIDOS -->
+    <section id="view-contenidos" class="view">
+      <h2>Contenidos</h2>
+      <div class="tabs" id="contenidos-tabs">
+        <button class="tab-btn active" data-tipo="libro">📖 Libro</button>
+        <button class="tab-btn" data-tipo="caligrafia">✍️ Caligrafía</button>
+        <button class="tab-btn" data-tipo="lectura">📚 Lectura</button>
+        <button class="tab-btn" data-tipo="copia">📝 Copia</button>
+      </div>
+      <div class="content-toolbar">
+        <button class="btn btn-secondary" id="btn-add-contenido">+ Añadir</button>
+        <label>Frecuencia:
+          <select id="frecuencia-select">
+            <option value="todos">Todos los días</option>
+            <option value="lmv">Lunes, miércoles, viernes</option>
+            <option value="mj">Martes, jueves</option>
+            <option value="custom">Personalizada…</option>
+          </select>
+        </label>
+      </div>
+      <div class="table-wrap">
+        <table class="contenidos-table" id="tabla-contenidos">
+          <thead><tr><th>#</th><th>Descripción</th><th>Estado</th><th>Fecha prevista</th><th>Acciones</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VISTA HORARIO -->
+    <section id="view-horario" class="view">
+      <h2>Horario de Lengua</h2>
+      <p class="hint">Sesiones de Lengua confirmadas a partir de tu horario personal (Tutoría 2ºC):</p>
+      <div class="horario-grid" id="horario-grid">
+        <div class="horario-day"><span>Lunes</span><strong>1 sesión</strong></div>
+        <div class="horario-day"><span>Martes</span><strong>1 sesión</strong></div>
+        <div class="horario-day"><span>Miércoles</span><strong>1 sesión</strong></div>
+        <div class="horario-day"><span>Jueves</span><strong>1 sesión</strong></div>
+        <div class="horario-day"><span>Viernes</span><strong>1 sesión</strong></div>
+      </div>
+    </section>
+
+    <!-- VISTA CALENDARIO -->
+    <section id="view-calendario" class="view">
+      <h2>Calendario escolar</h2>
+      <p class="hint">Días no lectivos, festivos y vacaciones cargados desde el calendario CLM 2026/2027 (pendiente de confirmar las 2 fiestas locales de Cedillo del Condado).</p>
+      <div class="table-wrap">
+        <table class="contenidos-table" id="tabla-calendario">
+          <thead><tr><th>Fecha</th><th>Tipo</th><th>Observaciones</th></tr></thead>
+          <tbody><!-- generado por calendario.js a partir de calendario-datos.json --></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VISTA HISTORIAL -->
+    <section id="view-historial" class="view">
+      <h2>Historial de cambios</h2>
+      <div class="toolbar">
+        <button class="btn btn-secondary" id="btn-deshacer">↩️ Deshacer último cambio</button>
+        <button class="btn btn-secondary" id="btn-restaurar">↩️ Restaurar planificación original</button>
+      </div>
+      <ul class="historial-list" id="historial-list"></ul>
+    </section>
+
+  </main>
+
+  <!-- Pantalla de acceso (Supabase Auth) -->
+  <div class="modal" id="auth-overlay">
+    <div class="modal-box">
+      <h3>Acceder a tu temporalización</h3>
+      <p class="hint">Inicia sesión para guardar y ver tus datos desde cualquier dispositivo.</p>
+      <label>Email <input type="email" id="auth-email" autocomplete="username"></label>
+      <label>Contraseña <input type="password" id="auth-password" autocomplete="current-password"></label>
+      <p id="auth-error" class="auth-error"></p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="auth-signup">Crear cuenta</button>
+        <button class="btn btn-primary" id="auth-login">Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: qué ha quedado pendiente (POR TERMINAR) -->
+  <div class="modal" id="modal-pendiente">
+    <div class="modal-box">
+      <h3>¿Se ha completado la página del libro de esta sesión?</h3>
+      <p class="hint">La caligrafía, lectura y copia no se controlan como pendientes: volverán a avisar el día que les toque.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modal-pendiente-cancelar">Cancelar</button>
+        <button class="btn btn-secondary" id="modal-pendiente-no">No, reorganizar página</button>
+        <button class="btn btn-primary" id="modal-pendiente-si">Sí, solo faltó lo demás</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: alcance de una edición manual -->
+  <div class="modal" id="modal-edicion">
+    <div class="modal-box">
+      <h3>¿Quieres modificar solamente esta sesión o reorganizar también las sesiones posteriores?</h3>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modal-edicion-solo">Solo esta sesión</button>
+        <button class="btn btn-primary" id="modal-edicion-todas">Esta sesión y reorganizar posteriores</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/supabase.js" defer></script>
+  <script src="js/calendario.js" defer></script>
+  <script src="js/contenidos.js" defer></script>
+  <script src="js/temporalizacion.js" defer></script>
+  <script src="js/sesiones.js" defer></script>
+  <script src="js/ui.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>
