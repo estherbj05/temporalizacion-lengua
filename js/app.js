@@ -4,17 +4,26 @@
 //   pide iniciar sesión y guarda/lee de la nube (tabla app_state).
 // - Si no, funciona igual que antes con localStorage en este navegador.
 
+function esFormatoValido(temporalizacion) {
+  // Comprueba que los datos cargados (nube o local) son del modelo actual
+  // (multi-asignatura). Si vinieran de una versión anterior, se ignoran en
+  // vez de romper la interfaz, y se genera todo de nuevo.
+  return Array.isArray(temporalizacion) && temporalizacion.length > 0 &&
+    temporalizacion[0].asignatura !== undefined && Array.isArray(temporalizacion[0].libroPaginas);
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   initNavegacion();
-  initTabsContenidos();
+  initFiltrosAsignatura();
   initModales();
-  initEstadoSesion();
+  initAccionesHoy();
   initAccionesTabla();
   initExportacion();
-  renderTablaContenidos("libro");
+  renderHorario();
+  renderCalendario();
 
   document.getElementById("btn-generar").addEventListener("click", () => {
-    const desde = document.getElementById("curso-desde")?.value || "2026-09-08";
+    const desde = document.getElementById("curso-desde")?.value || FECHA_INICIO_CURSO;
     const hasta = document.getElementById("curso-hasta")?.value || "2026-12-22";
     if (TEMPORALIZACION_ACTUAL.length && !confirm("Esto vuelve a generar la temporalización desde cero para el rango indicado y se perderán los cambios manuales actuales. ¿Continuar?")) {
       return;
@@ -41,17 +50,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+function generarPorDefecto() {
+  generarTemporalizacion(
+    document.getElementById("curso-desde").value,
+    document.getElementById("curso-hasta").value
+  );
+  guardarEstadoLocal();
+}
+
 function cargarModoSoloLocal() {
   const hayGuardado = cargarEstadoLocal();
-  if (hayGuardado) {
+  if (hayGuardado && esFormatoValido(TEMPORALIZACION_ACTUAL)) {
     renderTemporalizacion();
     registrarHistorial("🔄 Cargado el trabajo guardado en este navegador.");
   } else {
-    generarTemporalizacion(
-      document.getElementById("curso-desde").value,
-      document.getElementById("curso-hasta").value
-    );
-    guardarEstadoLocal();
+    generarPorDefecto();
   }
 }
 
@@ -60,23 +73,19 @@ async function cargarTrasLogin() {
   actualizarEstadoConexion(true);
 
   const estadoNube = await cargarEstadoNube();
-  if (estadoNube && estadoNube.temporalizacion && estadoNube.temporalizacion.length) {
+  if (estadoNube && esFormatoValido(estadoNube.temporalizacion)) {
     TEMPORALIZACION_ACTUAL = estadoNube.temporalizacion;
     PLANIFICACION_ORIGINAL = estadoNube.original || estadoNube.temporalizacion;
     HISTORIAL.length = 0;
     HISTORIAL.push(...(estadoNube.historial || []));
     renderTemporalizacion();
     registrarHistorial("☁️ Cargado el trabajo guardado en la nube.");
-  } else if (cargarEstadoLocal()) {
+  } else if (cargarEstadoLocal() && esFormatoValido(TEMPORALIZACION_ACTUAL)) {
     renderTemporalizacion();
     registrarHistorial("💾 No había nada en la nube todavía: se sube el trabajo que tenías guardado en este navegador.");
     guardarEstadoLocal(); // ya hay USUARIO_ACTUAL, así que esto también sube a Supabase
   } else {
-    generarTemporalizacion(
-      document.getElementById("curso-desde").value,
-      document.getElementById("curso-hasta").value
-    );
-    guardarEstadoLocal();
+    generarPorDefecto();
   }
 }
 

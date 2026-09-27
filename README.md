@@ -1,35 +1,49 @@
-# Temporalización de Lengua · 2º Primaria
+# Temporalización · 2º Primaria
 
 Aplicación web para planificar y reorganizar dinámicamente la temporalización de
-Lengua Castellana (Libro, Caligrafía, Lectura, Copia) durante el curso escolar.
+Lengua, Matemáticas y Conocimiento del Medio (cada una de forma independiente)
+durante el curso escolar.
 
 Tecnología: HTML5 + CSS3 + JavaScript vanilla + Supabase. Sin frameworks.
 
 ## Estado actual del proyecto
 
-- ✅ **Fase 1 (Interfaz):** completa y navegable.
-- ⏳ **Fase 2 (Supabase):** esquema SQL listo (`sql/schema.sql`); falta conectar
-  las claves del proyecto en `js/supabase.js`. Mientras tanto, la app guarda
-  el trabajo con `localStorage` **en este mismo navegador** (no se sincroniza
-  entre dispositivos ni se ve desde otro ordenador hasta que se conecte Supabase).
-- ✅ **Fase 3 (Contenidos):** cargadas las 56 páginas del libro (10-27, 30-47, 50-69).
-  Caligrafía/lectura/copia no llevan listado propio: la app solo avisa "Toca
-  caligrafía/lectura/copia" según la frecuencia semanal definida en `js/contenidos.js`.
-- ✅ **Fases 4-6 (Horario, Calendario, Generación automática):** funcionando.
-- ✅ **Fases 7-10 (Estados, reorganización en cadena, bloqueo, historial, deshacer/restaurar):**
-  funcionando, tanto desde la vista "Hoy" como con los botones 🟢🟠🔴🔒 de cada fila
-  en Semana/Mes/Todo el curso.
-- ✅ **Fase 12 (Exportación):** CSV funcional (se abre bien en Excel); "Exportar PDF"
-  usa la impresión del navegador; falta un export a .xlsx real si lo prefieres.
-- ⏳ **Fase 9 (edición manual fina: cambiar una página concreta, añadir/eliminar
-  contenidos desde la interfaz):** pendiente.
-- ⏳ Confirmar las 2 fiestas locales de Cedillo del Condado en `js/calendario.js`.
+- ✅ **Interfaz multi-asignatura:** vistas Hoy / Semana / Mes / Todo el curso /
+  Progreso / Contenidos / Horario / Calendario / Historial, con filtro por
+  asignatura en las tablas.
+- ✅ **Horario real cargado** (`js/horario.js`): Lengua 6 sesiones/semana,
+  Matemáticas 6, Conocimiento del Medio 4 — calculado automáticamente del horario,
+  no a mano.
+- ✅ **Contenidos de Lengua** (16-33, 36-53, 56-79 → 60 páginas) y
+  **Matemáticas** (8-11, 14-31, 34-51, 54-71 → 58 páginas) cargados, con
+  actividades complementarias repartidas por turno (Lengua: lectura/caligrafía/dictado;
+  Matemáticas: cálculo mental/cuentas/problemas).
+- ⏳ **Conocimiento del Medio:** módulo preparado pero sin contenidos todavía
+  (`ASIGNATURAS.conocimiento.colaLibro` vacío en `js/contenidos.js`) — no se ha inventado nada.
+- ✅ **Calendario oficial CLM 2026/2027** cargado hasta diciembre; la
+  temporalización nunca genera sesiones antes del **28/09/2026**
+  (`FECHA_INICIO_CURSO` en `js/calendario.js`).
+- ✅ **Motor por colas independiente por asignatura**: marcar 🟢/🟠🔴 en
+  Matemáticas nunca afecta a Lengua ni a Conocimiento, y viceversa.
+  🟠 Por terminar pregunta cuántas páginas se completaron y solo reorganiza el resto.
+- ✅ **"➕ Más páginas"** (hacer más de lo previsto en una sesión, reorganizando
+  las siguientes) y **"⚡ Acelerar"** por asignatura desde una fecha (vista Contenidos).
+- ✅ **Progreso** por asignatura (páginas hechas / total) y un indicador simple
+  de **retraso** (sesiones pasadas sin marcar).
+- ✅ **Bloqueo de sesiones**, **historial**, **deshacer/restaurar planificación original**.
+- ✅ **Exportar CSV** (se abre bien en Excel).
+- ✅ **Guardado**: local (`localStorage`) siempre, y en la nube (Supabase) si
+  conectas tu proyecto (ver más abajo) — accesible entonces desde cualquier dispositivo.
+- ⏳ Pendiente: edición manual fina de una sesión suelta (cambiar página exacta
+  a mano sin usar "más páginas"), fiestas locales/días de libre disposición del
+  centro (no fijados aún en el calendario regional), y los contenidos de
+  Conocimiento del Medio cuando los tengas listos.
 
 ## 1. Crear el proyecto
 
 ```bash
-mkdir temporalizacion-lengua
-cd temporalizacion-lengua
+mkdir temporalizacion-2primaria
+cd temporalizacion-2primaria
 # copia aquí todos los archivos de esta carpeta
 ```
 
@@ -60,7 +74,9 @@ const SUPABASE_ANON_KEY = "TU_SUPABASE_ANON_KEY_AQUI";
 ```
 
 por tus valores reales. (La `anon key` es pública por diseño; la seguridad real
-la da Row Level Security, ya activado en el esquema.)
+la da Row Level Security, ya activado en el esquema.) **Importante:** cambia
+solo el contenido entre comillas — no toques la función `supabaseConfigurado()`
+más abajo en el mismo archivo.
 
 ## 6. Ejecutar la aplicación
 
@@ -70,21 +86,21 @@ También puedes abrir `index.html` directamente en el navegador para probar la i
 ## 7. Crear el repositorio en GitHub
 
 En [github.com](https://github.com), pulsa **New repository**, nómbralo
-`temporalizacion-lengua` y no marques "Initialize with README" (ya tienes uno).
+`temporalizacion-2primaria` (o el que prefieras) y no marques "Initialize with README" (ya tienes uno).
 
 ## 8. Hacer commit
 
 ```bash
 git init
 git add .
-git commit -m "Fase 1: interfaz base y esquema Supabase"
+git commit -m "App multi-asignatura: Lengua, Matemáticas y Conocimiento del Medio"
 ```
 
 ## 9. Hacer push
 
 ```bash
 git branch -M main
-git remote add origin https://github.com/TU_USUARIO/temporalizacion-lengua.git
+git remote add origin https://github.com/TU_USUARIO/temporalizacion-2primaria.git
 git push -u origin main
 ```
 
@@ -99,19 +115,23 @@ Opción más sencilla: **GitHub Pages**.
 
 ## Datos ya confirmados
 
-**Horario de Lengua (Tutoría 2ºC)** — 1 sesión todos los días lectivos:
-Lunes, Martes, Miércoles, Jueves, Viernes.
+**Horario real** (`js/horario.js`) — Lengua: Lunes(x2), Martes, Miércoles, Jueves,
+Viernes = 6 sesiones/semana. Matemáticas: Lunes, Miércoles, Jueves(x2), Viernes(x2)
+= 6 sesiones/semana. Conocimiento del Medio: Lunes, Miércoles, Jueves, Viernes =
+4 sesiones/semana.
 
-**Calendario escolar CLM 2026/2027** (tramo 01/09/2026-31/12/2026) — ver
-`js/calendario.js` para el detalle día a día. Pendiente: las 2 fiestas locales
-de Cedillo del Condado, aún sin fijar en el calendario regional.
+**Calendario escolar CLM 2026/2027** (cartel oficial de
+educacion.castillalamancha.es, hasta diciembre) — ver `js/calendario.js` para
+el detalle día a día. Pendiente: días de libre disposición del centro / fiestas
+locales de Cedillo del Condado, aún sin fijar.
+
+**Fecha de inicio real de la temporalización: 28/09/2026** — no se generan
+sesiones antes de esa fecha aunque se pida un rango anterior.
 
 ## Datos pendientes de recibir
 
-- Listado ordenado de páginas del libro.
-- Listado ordenado de fichas de caligrafía.
-- Listado ordenado de lecturas.
-- Listado ordenado de copias.
+- Contenidos de Conocimiento del Medio (unidades, temas, páginas, fichas...).
+- Confirmación de los días de libre disposición / fiestas locales.
 
 ## Conectar Supabase para acceder desde varios dispositivos
 
@@ -132,3 +152,4 @@ de Cedillo del Condado, aún sin fijar en el calendario regional.
 ## Publicarla como app web (para usarla desde el móvil o cualquier ordenador)
 
 Con GitHub Pages (pasos 7-10 más arriba) tienes una URL pública y gratuita, sirve como "aplicación web": puedes guardarla en la pantalla de inicio del móvil y se abre como una app. Si prefieres otra alternativa a GitHub Pages, Netlify y Vercel también funcionan igual de bien arrastrando la carpeta del proyecto a su web — el código no cambia.
+

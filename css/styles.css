@@ -104,6 +104,24 @@ th{background:var(--color-gray-bg);font-weight:600;color:var(--color-text-muted)
 .auth-status{font-size:13px;color:var(--color-text-muted);white-space:nowrap;}
 .auth-error{color:var(--color-red);font-size:13px;min-height:18px;}
 
+.hoy-lista{display:flex;flex-direction:column;gap:16px;}
+.sesion-card{background:var(--color-surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;border-left:6px solid var(--color-primary);}
+.sesion-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.sesion-card-titulo{font-size:16px;font-weight:700;}
+.sesion-card-hora{color:var(--color-text-muted);font-size:13px;}
+.sesion-card-contenido{font-size:17px;font-weight:600;margin:8px 0 14px;}
+.sesion-card-actividad{color:var(--color-primary);font-weight:600;}
+
+.badge-asignatura{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:700;color:#fff;}
+
+.filtro-asignatura{margin-bottom:14px;}
+
+.asignatura-bloque{background:var(--color-surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+.asignatura-bloque h3{margin-top:0;}
+.asignatura-controles{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px;}
+.asignatura-controles input[type="number"]{width:70px;padding:6px;border:1px solid var(--color-border);border-radius:6px;}
+.asignatura-controles input[type="date"]{padding:6px;border:1px solid var(--color-border);border-radius:6px;}
+
 .historial-list{list-style:none;padding:0;}
 .historial-list li{background:var(--color-surface);border-radius:8px;box-shadow:var(--shadow);padding:12px 16px;margin-bottom:8px;font-size:14px;}
 

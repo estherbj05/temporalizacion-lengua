@@ -5,7 +5,7 @@
 const HISTORIAL = []; // { fecha, descripcion }
 const PILA_DESHACER = []; // snapshots { temporalizacion, historial }
 
-const CLAVE_LOCAL = "temporalizacion-lengua-v1";
+const CLAVE_LOCAL = "temporalizacion-2primaria-v1"; // v1 del modelo multi-asignatura (cambia si el formato de datos cambia)
 
 function registrarHistorial(descripcion) {
   HISTORIAL.unshift({ fecha: new Date().toISOString(), descripcion });
