@@ -39,7 +39,10 @@ const ASIGNATURAS = {
     nombre: "Conocimiento del Medio",
     icono: "🌍",
     color: "#2f9e6e",
-    colaLibro: [], // pendiente: unidades/temas/páginas (no inventar)
+    // Confirmado: 10-25, 28-43, 46-63 (50 páginas). Sin actividades complementarias
+    // propias por ahora (no se han indicado); si en el futuro se añaden fichas u
+    // otras actividades, se pondrían aquí igual que en Lengua/Matemáticas.
+    colaLibro: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63],
     actividades: [],
     actividadLabel: {},
     actividadIcono: {},
