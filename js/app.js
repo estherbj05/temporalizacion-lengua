@@ -50,6 +50,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+// Si los contenidos/fecha de inicio han cambiado desde que se guardó el trabajo,
+// se ofrece regenerar (el maestro decide; nunca se hace sin preguntar).
+function verificarContenidosActualizados() {
+  if (FIRMA_GUARDADA === firmaContenidos()) return;
+  if (confirm("Los contenidos (páginas o fecha de inicio) han cambiado desde la última vez que se guardó tu trabajo.\n\n¿Regenerar la temporalización con los contenidos actuales?\n\nAceptar = regenerar (se pierden los estados marcados).\nCancelar = mantener lo que tenías.")) {
+    generarPorDefecto();
+    registrarHistorial("⚙️ Temporalización regenerada automáticamente por cambio de contenidos.");
+    guardarEstadoLocal();
+  } else {
+    FIRMA_GUARDADA = firmaContenidos();
+  }
+}
+
 function generarPorDefecto() {
   generarTemporalizacion(
     document.getElementById("curso-desde").value,
@@ -63,6 +76,7 @@ function cargarModoSoloLocal() {
   if (hayGuardado && esFormatoValido(TEMPORALIZACION_ACTUAL)) {
     renderTemporalizacion();
     registrarHistorial("🔄 Cargado el trabajo guardado en este navegador.");
+    verificarContenidosActualizados();
   } else {
     generarPorDefecto();
   }
@@ -78,11 +92,14 @@ async function cargarTrasLogin() {
     PLANIFICACION_ORIGINAL = estadoNube.original || estadoNube.temporalizacion;
     HISTORIAL.length = 0;
     HISTORIAL.push(...(estadoNube.historial || []));
+    FIRMA_GUARDADA = estadoNube.firma || null;
     renderTemporalizacion();
     registrarHistorial("☁️ Cargado el trabajo guardado en la nube.");
+    verificarContenidosActualizados();
   } else if (cargarEstadoLocal() && esFormatoValido(TEMPORALIZACION_ACTUAL)) {
     renderTemporalizacion();
     registrarHistorial("💾 No había nada en la nube todavía: se sube el trabajo que tenías guardado en este navegador.");
+    verificarContenidosActualizados();
     guardarEstadoLocal(); // ya hay USUARIO_ACTUAL, así que esto también sube a Supabase
   } else {
     generarPorDefecto();

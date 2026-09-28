@@ -14,7 +14,8 @@ let supabaseClient = null;
 let USUARIO_ACTUAL = null; // objeto user de Supabase Auth, o null si no hay sesión
 
 function supabaseConfigurado() {
-  return SUPABASE_URL !== "TU_SUPABASE_URL_AQUI" && SUPABASE_ANON_KEY !== "TU_SUPABASE_ANON_KEY_AQUI";
+  // No compara con textos de ejemplo (así no se rompe si se hace buscar/reemplazar):
+  return SUPABASE_URL.startsWith("https://") && SUPABASE_URL.endsWith(".supabase.co") && SUPABASE_ANON_KEY.length > 20;
 }
 
 async function cargarLibreriaSupabase() {
